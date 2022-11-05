@@ -3,6 +3,7 @@ import dotenv from 'dotenv';
 import mongoose from 'mongoose';
 import logger from './logger';
 import { Request, Response, NextFunction } from 'express';
+import productRouter from './routes/Product.route';
 
 dotenv.config();
 const app = express();
@@ -57,6 +58,7 @@ const startServer = () => {
   });
 
   // Routes
+  app.use('/products', productRouter);
 
   app.use('/healthcheck', (req: Request, res: Response, next: NextFunction) => {
     res.status(200).json({ message: "I'm alive" });

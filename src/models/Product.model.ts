@@ -20,7 +20,6 @@ const ProductSchema = new Schema({
   updateDate: {
     type: Date,
     required: true,
-    default: new Date(),
   },
 });
 
