@@ -21,6 +21,15 @@ class ProductService {
       throw new Error('Unable to create product');
     }
   };
+
+  public readAll = async (): Promise<IProduct[] | Error> => {
+    try {
+      const products = await Product.find();
+      return products;
+    } catch (error) {
+      throw new Error('Unable to read products');
+    }
+  };
 }
 
 export default ProductService;
