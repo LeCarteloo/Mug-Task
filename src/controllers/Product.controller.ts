@@ -17,9 +17,7 @@ const createProduct = async (
 
     res.status(201).json(product);
   } catch (error: any) {
-    res
-      .status(400)
-      .json({ message: 'Cannot create product', error: error.toString() });
+    res.status(400).json({ message: error.message });
   }
 };
 
@@ -36,9 +34,7 @@ const readProducts = async (
 
     res.status(200).json(products);
   } catch (error: any) {
-    res
-      .status(400)
-      .json({ message: 'Cannot read products', error: error.toString() });
+    res.status(400).json({ message: error.message });
   }
 };
 
@@ -49,12 +45,60 @@ const readProduct = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const productId = req.params.productId;
     const product = await productService.read(productId);
+
     res.status(200).json(product);
   } catch (error: any) {
-    res
-      .status(404)
-      .json({ message: 'Product not found', error: error.toString() });
+    res.status(400).json({ message: error.message });
   }
 };
 
-export { createProduct, readProducts, readProduct };
+// @desc Update product by id
+// @route PUT /products/:productId
+// @access Public
+const updateProduct = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const { name, price } = req.body;
+    const productId = req.params.productId;
+    const product = await productService.update(productId, name, price);
+
+    res.status(200).json(product);
+  } catch (error: any) {
+    res.status(400).json({
+      message: error.message,
+    });
+  }
+};
+
+// @desc Delete product by id
+// @route DELETE /products/:productId
+// @access Public
+const deleteProduct = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const productId = req.params.productId;
+    const product = await productService.delete(productId);
+
+    res.status(200).json(product);
+  } catch (error: any) {
+    console.log('test');
+
+    res.status(400).json({
+      message: error.message,
+    });
+  }
+};
+
+export {
+  createProduct,
+  readProducts,
+  readProduct,
+  updateProduct,
+  deleteProduct,
+};

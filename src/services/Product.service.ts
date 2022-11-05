@@ -34,7 +34,58 @@ class ProductService {
   public read = async (productId: string): Promise<IProduct | null | Error> => {
     try {
       const product = await Product.findById(productId);
+
+      if (!product) {
+        throw new Error('Product doesnt exist');
+      }
+
       return product;
+    } catch (error: any) {
+      throw new Error(error);
+    }
+  };
+
+  public update = async (
+    productId: string,
+    name: string,
+    price: number
+  ): Promise<IProduct | null | Error> => {
+    try {
+      const productExist = await Product.findById(productId);
+
+      if (!productExist) {
+        throw new Error("Product doesn't exist");
+      }
+
+      const updatedProduct = await Product.findByIdAndUpdate(
+        productId,
+        {
+          name,
+          price,
+          updateDate: new Date(),
+        },
+        { new: true }
+      );
+
+      return updatedProduct;
+    } catch (error: any) {
+      throw new Error(error);
+    }
+  };
+
+  public delete = async (
+    productId: string
+  ): Promise<IProduct | null | Error> => {
+    try {
+      const productExist = await Product.findById(productId);
+
+      if (!productExist) {
+        throw new Error('Product doesnt exist');
+      }
+
+      const deletedProduct = await Product.findByIdAndDelete(productId);
+
+      return deletedProduct;
     } catch (error: any) {
       throw new Error(error);
     }
