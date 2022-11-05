@@ -16,8 +16,10 @@ const createProduct = async (
     const product = await productService.create(name, price);
 
     res.status(201).json(product);
-  } catch (error) {
-    res.status(400).json({ message: 'Cannot create product' });
+  } catch (error: any) {
+    res
+      .status(400)
+      .json({ message: 'Cannot create product', error: error.toString() });
   }
 };
 
@@ -33,9 +35,26 @@ const readProducts = async (
     const products = await productService.readAll();
 
     res.status(200).json(products);
-  } catch (error) {
-    res.status(400).json({ message: 'Cannot read products' });
+  } catch (error: any) {
+    res
+      .status(400)
+      .json({ message: 'Cannot read products', error: error.toString() });
   }
 };
 
-export { createProduct, readProducts };
+// @desc Read product by id
+// @route GET /products/:productId
+// @access Public
+const readProduct = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const productId = req.params.productId;
+    const product = await productService.read(productId);
+    res.status(200).json(product);
+  } catch (error: any) {
+    res
+      .status(404)
+      .json({ message: 'Product not found', error: error.toString() });
+  }
+};
+
+export { createProduct, readProducts, readProduct };

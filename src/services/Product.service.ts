@@ -17,8 +17,8 @@ class ProductService {
       const createdProduct = await Product.create(product);
 
       return createdProduct;
-    } catch (error) {
-      throw new Error('Unable to create product');
+    } catch (error: any) {
+      throw new Error(error);
     }
   };
 
@@ -26,8 +26,17 @@ class ProductService {
     try {
       const products = await Product.find();
       return products;
-    } catch (error) {
-      throw new Error('Unable to read products');
+    } catch (error: any) {
+      throw new Error(error);
+    }
+  };
+
+  public read = async (productId: string): Promise<IProduct | null | Error> => {
+    try {
+      const product = await Product.findById(productId);
+      return product;
+    } catch (error: any) {
+      throw new Error(error);
     }
   };
 }
